@@ -62,8 +62,6 @@ if(isset($_POST['email'])) {
     died($error_message);
   }
 
-    $email_message = "Contact Details:\n\n";
-
 
     function clean_string($string) {
       $bad = array("content-type","bcc:","to:","cc:","href");
@@ -71,17 +69,31 @@ if(isset($_POST['email'])) {
     }
 
 
-
-    $email_message .= "First Name: ".clean_string($first_name)."\n";
-    $email_message .= "Email: ".clean_string($email_from)."\n";
-    $email_message .= "Company: ".clean_string($company)."\n";
-    $email_message .= "message: ".clean_string($message)."\n";
+$email_message = "
+    <html>
+        <head>
+        <title>New Portfolio Contact</title>
+        </head>
+    <body>
+    <section style='background-color: #74b9ff; height: 100%; margin: auto; text-align: center; width: 100%'>
+        <div>
+            <p style='color: white; font-family: Arial, Helvetica, sans-serif; font-size: 20px; padding: 15px;'>You have a new contact!</p>
+            <p style='color: white; font-family: Arial, Helvetica, sans-serif; font-size: 20px; padding: 15px;'>Name: ".clean_string($first_name)."</p>
+            <p style='color: white; font-family: Arial, Helvetica, sans-serif; font-size: 20px; padding: 15px;'>Email: ".clean_string($email_from)."</a></p>
+            <p style='color: white; font-family: Arial, Helvetica, sans-serif; font-size: 20px; padding: 15px;'>Company: ".clean_string($company)."</p>
+        </div>
+        <div style='max-width: 40%;margin: auto;'>
+            <p style='color: white; font-family: Arial, Helvetica, sans-serif; font-size: 20px; padding: 15px;'>".clean_string($message)."</p>
+        </div>
+    </section>
+    </body>
+    </html>";
 
 // create email headers
-$headers = 'From: '.$email_from."\r\n".
-'Reply-To: '.$email_from."\r\n" .
-'X-Mailer: PHP/' . phpversion();
-@mail($email_to, $email_subject, $email_message, $headers);
+$headers = "MIME-Version: 1.0" . "\r\n";
+$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+$headers .= 'From: taylor@taylorparker.me' . "\r\n";
+mail($email_to, $email_subject, $email_message, $headers);
 ?>
 
 <!-- include your own success html here -->
